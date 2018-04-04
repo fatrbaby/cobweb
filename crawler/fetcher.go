@@ -1,14 +1,14 @@
 package crawler
 
 import (
-	"net/http"
-	"fmt"
-	"io/ioutil"
-	"io"
-	"golang.org/x/text/transform"
-	"golang.org/x/text/encoding"
 	"bufio"
+	"fmt"
 	"golang.org/x/net/html/charset"
+	"golang.org/x/text/encoding"
+	"golang.org/x/text/transform"
+	"io"
+	"io/ioutil"
+	"net/http"
 )
 
 func FetchContentFrom(url string, toUtf8 bool) []byte {
@@ -37,8 +37,6 @@ func FetchContentFrom(url string, toUtf8 bool) []byte {
 	if err != nil {
 		panic(err)
 	}
-
-
 
 	return raw
 }
