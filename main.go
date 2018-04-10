@@ -7,8 +7,8 @@ import (
 
 func main() {
 	spider := engine.Spider{
-		Url: "http://www.zhenai.com/zhenghun",
-		ParserFunc: parser.CityParser,
+		Url:    "http://www.zhenai.com/zhenghun",
+		Parser: parser.CityListParser,
 	}
 
 	engine.Run(spider)

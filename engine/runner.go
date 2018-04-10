@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func Run(spiders ...Spider)  {
+func Run(spiders ...Spider) {
 	var seeds []Spider
 
 	for _, spider := range spiders {
@@ -22,7 +22,7 @@ func Run(spiders ...Spider)  {
 			continue
 		}
 
-		result := seed.ParserFunc(body)
+		result := seed.Parser(body)
 		seeds = append(seeds, result.Spiders...)
 
 		for _, item := range result.Items {

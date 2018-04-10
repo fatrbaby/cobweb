@@ -1,15 +1,15 @@
 package engine
 
 type Spider struct {
-	Url string
-	ParserFunc func([]byte) ParsedResult
+	Url    string
+	Parser func([]byte) ParsedResult
 }
 
 type ParsedResult struct {
 	Spiders []Spider
-	Items []interface{}
+	Items   []interface{}
 }
 
-func NilParser([]byte) ParsedResult  {
+func NilParser([]byte) ParsedResult {
 	return ParsedResult{}
 }
