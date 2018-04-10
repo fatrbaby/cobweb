@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"github.com/fatrbaby/marmot/engine"
 	"regexp"
 )
 
@@ -9,20 +10,20 @@ type City struct {
 	Link []byte
 }
 
-
 const (
-	CityListPattern = `<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([^<]+)</a>`
+	CityListPattern = `<a href="(http://www.zhenai.com/zhenghun/\w+)"[^>]*>([^<]+)</a>`
 )
 
-func FindCities(content []byte) []City {
+func CityParser(content []byte) engine.ParsedResult {
 	re := regexp.MustCompile(CityListPattern)
 
 	matches := re.FindAllSubmatch(content, -1)
-	var cities = make([]City, len(matches))
+	var results = engine.ParsedResult{}
 
 	for _, match := range matches {
-		cities = append(cities, City{match[2], match[1]})
+		results.Items = append(results.Items, string(match[2]))
+		results.Spiders = append(results.Spiders, engine.Spider{Url:string(match[1]), ParserFunc: engine.NilParser})
 	}
 
-	return cities
+	return results
 }
