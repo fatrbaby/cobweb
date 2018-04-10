@@ -28,7 +28,8 @@ func Fetch(url string, toUTF8 bool) ([]byte, error) {
 	var body io.Reader
 
 	if toUTF8 {
-		body = transform.NewReader(response.Body, EncodingGuesser(response.Body).NewDecoder())
+		buff := bufio.NewReader(response.Body)
+		body = transform.NewReader(buff, EncodingGuesser(buff).NewDecoder())
 	} else {
 		body = response.Body
 	}
@@ -42,8 +43,8 @@ func Fetch(url string, toUTF8 bool) ([]byte, error) {
 	return raw, err
 }
 
-func EncodingGuesser(reader io.Reader) encoding.Encoding {
-	bytes, err := bufio.NewReader(reader).Peek(1024)
+func EncodingGuesser(reader *bufio.Reader) encoding.Encoding {
+	bytes, err := reader.Peek(1024)
 
 	if err != nil {
 		return unicode.UTF8
