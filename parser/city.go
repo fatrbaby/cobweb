@@ -23,7 +23,10 @@ func CityParser(content []byte) engine.ParsedResult {
 
 	for _, match := range matches {
 		results.Items = append(results.Items, string(match[2]))
-		results.Spiders = append(results.Spiders, engine.Spider{Url: string(match[1]), Parser: engine.NilParser})
+		parser := func(c []byte) engine.ParsedResult {
+			return ProfileParser(c, string(match[2]))
+		}
+		results.Spiders = append(results.Spiders, engine.Spider{Url: string(match[1]), Parser: parser})
 	}
 
 	return results
