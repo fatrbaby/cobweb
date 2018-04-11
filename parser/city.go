@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/fatrbaby/marmot/engine"
+	"github.com/fatrbaby/cobweb/engine"
 	"regexp"
 )
 

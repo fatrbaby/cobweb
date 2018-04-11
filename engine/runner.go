@@ -1,7 +1,7 @@
 package engine
 
 import (
-	"github.com/fatrbaby/marmot/crawler"
+	"github.com/fatrbaby/cobweb/crawler"
 	"log"
 )
 

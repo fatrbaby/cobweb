@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/fatrbaby/marmot/engine"
-	"github.com/fatrbaby/marmot/parser"
+	"github.com/fatrbaby/cobweb/engine"
+	"github.com/fatrbaby/cobweb/parser"
 )
 
 func main() {

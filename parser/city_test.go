@@ -2,7 +2,7 @@ package parser
 
 import (
 	"fmt"
-	"github.com/fatrbaby/marmot/crawler"
+	"github.com/fatrbaby/cobweb/crawler"
 	"testing"
 )
 
