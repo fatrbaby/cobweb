@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/fatrbaby/cobweb/engine"
 	"github.com/fatrbaby/cobweb/parser"
+	"github.com/fatrbaby/cobweb/scheduler"
 )
 
 func main() {
@@ -11,5 +12,10 @@ func main() {
 		Parser: parser.CityListParser,
 	}
 
-	engine.SimpleEngine{}.Run(spider)
+	runner := engine.ConcurrentEngine{
+		Scheduler:   &scheduler.SimpleScheduler{},
+		WorkerCount: 100,
+	}
+
+	runner.Run(spider)
 }

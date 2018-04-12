@@ -10,9 +10,13 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
+var rateLimiter = time.Tick(100 * time.Millisecond)
+
 func Fetch(url string, toUTF8 bool) ([]byte, error) {
+	<- rateLimiter
 	response, err := http.Get(url)
 
 	if err != nil {

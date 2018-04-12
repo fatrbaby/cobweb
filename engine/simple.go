@@ -6,10 +6,9 @@ import (
 )
 
 type SimpleEngine struct {
-
 }
 
-func (se SimpleEngine) Run(spiders ...Spider) {
+func (se *SimpleEngine) Run(spiders ...Spider) {
 	var seeds []Spider
 
 	for _, spider := range spiders {
@@ -20,7 +19,7 @@ func (se SimpleEngine) Run(spiders ...Spider) {
 		seed := seeds[0]
 		seeds = seeds[1:]
 
-		result, err := se.worker(seed)
+		result, err := worker(seed)
 
 		if err != nil {
 			continue
@@ -34,12 +33,12 @@ func (se SimpleEngine) Run(spiders ...Spider) {
 	}
 }
 
-func (se SimpleEngine)worker(spider Spider) (ParsedResult, error) {
-	log.Printf("Fetching: %s", spider.Url)
+func worker(spider Spider) (ParsedResult, error) {
+	log.Printf("Fetching: %s\n", spider.Url)
 	body, err := crawler.Fetch(spider.Url, true)
 
 	if err != nil {
-		log.Printf("Fetch error on fetching: %s, %v", spider.Url, err)
+		log.Printf("Fetch error on fetching: %s, %v\n", spider.Url, err)
 		return ParsedResult{}, err
 	}
 

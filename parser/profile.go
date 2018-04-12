@@ -8,17 +8,17 @@ import (
 )
 
 var (
-	AgeMatcher = regexp.MustCompile(`<td><span[^>]*>年龄：</span>([\d]+)岁</td>`)
-	GenderMatcher = regexp.MustCompile(`<td><span[^>]*>性别：</span><span field="">([^<]+)</span></td>`)
-	MarriageMatcher = regexp.MustCompile(`<td><span[^>]*>婚况：</span>([^<]+)</td>`)
-	HeightMatcher = regexp.MustCompile(`<td><span[^>]*>身高：</span><span field="">([\d]+)CM</span></td>`)
-	WeightMatcher = regexp.MustCompile(`<td><span[^>]*>体重：</span><span field="">([\d]+)</span></td>`)
-	IncomeMatcher = regexp.MustCompile(`<td><span[^>]*>月收入：</span>([^<]+)</td>`)
-	EducationMatcher = regexp.MustCompile(`<td><span[^>]*>学历：</span>([^<]+)</td>`)
-	OccupationMatcher = regexp.MustCompile(`<td><span[^>]*>职业： </span>([^<]+)</td>`)
+	AgeMatcher           = regexp.MustCompile(`<td><span[^>]*>年龄：</span>([\d]+)岁</td>`)
+	GenderMatcher        = regexp.MustCompile(`<td><span[^>]*>性别：</span><span field="">([^<]+)</span></td>`)
+	MarriageMatcher      = regexp.MustCompile(`<td><span[^>]*>婚况：</span>([^<]+)</td>`)
+	HeightMatcher        = regexp.MustCompile(`<td><span[^>]*>身高：</span><span field="">([\d]+)CM</span></td>`)
+	WeightMatcher        = regexp.MustCompile(`<td><span[^>]*>体重：</span><span field="">([\d]+)</span></td>`)
+	IncomeMatcher        = regexp.MustCompile(`<td><span[^>]*>月收入：</span>([^<]+)</td>`)
+	EducationMatcher     = regexp.MustCompile(`<td><span[^>]*>学历：</span>([^<]+)</td>`)
+	OccupationMatcher    = regexp.MustCompile(`<td><span[^>]*>职业： </span>([^<]+)</td>`)
 	ConstellationMatcher = regexp.MustCompile(`<td><span[^>]*>星座：</span><span field="">([^<]+)</span></td>`)
-	HouseMatcher = regexp.MustCompile(`<td><span[^>]*>住房条件：</span><span field="">([^<]+)</span></td>`)
-	CarMatcher = regexp.MustCompile(`<td><span[^>]*>是否购车：</span><span field="">([^<]+)</span></td>`)
+	HouseMatcher         = regexp.MustCompile(`<td><span[^>]*>住房条件：</span><span field="">([^<]+)</span></td>`)
+	CarMatcher           = regexp.MustCompile(`<td><span[^>]*>是否购车：</span><span field="">([^<]+)</span></td>`)
 )
 
 func ProfileParser(contents []byte, name string) engine.ParsedResult {

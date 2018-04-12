@@ -11,8 +11,8 @@ type City struct {
 }
 
 const (
-	CityPattern     = `<a href="(http://album.zhenai.com/u/[0-9]+"[^>]*)>([^<]+)</a>`
-	CityListPattern = `<a href="(http://www.zhenai.com/zhenghun/\w+)"[^>]*>([^<]+)</a>`
+	CityPattern     = `<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a>`
+	CityListPattern = `<a href="(http://www.zhenai.com/zhenghun/[\w]+)"[^>]*>([^<]+)</a>`
 )
 
 func CityParser(content []byte) engine.ParsedResult {
