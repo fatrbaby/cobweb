@@ -15,18 +15,29 @@ func Run(spiders ...Spider) {
 	for len(seeds) > 0 {
 		seed := seeds[0]
 		seeds = seeds[1:]
-		body, err := crawler.Fetch(seed.Url, true)
+
+		result, err := worker(seed)
 
 		if err != nil {
-			log.Printf("Fetch error on fetching: %s, %v", seed.Url, err)
 			continue
 		}
-
-		result := seed.Parser(body)
+		
 		seeds = append(seeds, result.Spiders...)
 
 		for _, item := range result.Items {
 			log.Printf("Got url: %v", item)
 		}
 	}
+}
+
+func worker(spider Spider) (ParsedResult, error) {
+	log.Printf("Fetching: %s", spider.Url)
+	body, err := crawler.Fetch(spider.Url, true)
+
+	if err != nil {
+		log.Printf("Fetch error on fetching: %s, %v", spider.Url, err)
+		return ParsedResult{}, err
+	}
+
+	return spider.Parser(body), nil
 }
