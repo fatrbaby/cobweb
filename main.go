@@ -11,5 +11,5 @@ func main() {
 		Parser: parser.CityListParser,
 	}
 
-	engine.Run(spider)
+	engine.SimpleEngine{}.Run(spider)
 }

@@ -5,7 +5,11 @@ import (
 	"log"
 )
 
-func Run(spiders ...Spider) {
+type SimpleEngine struct {
+
+}
+
+func (se SimpleEngine) Run(spiders ...Spider) {
 	var seeds []Spider
 
 	for _, spider := range spiders {
@@ -16,12 +20,12 @@ func Run(spiders ...Spider) {
 		seed := seeds[0]
 		seeds = seeds[1:]
 
-		result, err := worker(seed)
+		result, err := se.worker(seed)
 
 		if err != nil {
 			continue
 		}
-		
+
 		seeds = append(seeds, result.Spiders...)
 
 		for _, item := range result.Items {
@@ -30,7 +34,7 @@ func Run(spiders ...Spider) {
 	}
 }
 
-func worker(spider Spider) (ParsedResult, error) {
+func (se SimpleEngine)worker(spider Spider) (ParsedResult, error) {
 	log.Printf("Fetching: %s", spider.Url)
 	body, err := crawler.Fetch(spider.Url, true)
 
