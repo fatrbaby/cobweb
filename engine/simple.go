@@ -34,7 +34,6 @@ func (se *SimpleEngine) Run(spiders ...Spider) {
 }
 
 func worker(spider Spider) (ParsedResult, error) {
-	log.Printf("Fetching: %s\n", spider.Url)
 	body, err := crawler.Fetch(spider.Url, true)
 
 	if err != nil {
