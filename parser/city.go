@@ -15,10 +15,13 @@ const (
 	CityListPattern = `<a href="(http://www.zhenai.com/zhenghun/[\w]+)"[^>]*>([^<]+)</a>`
 )
 
-func CityParser(content []byte) engine.ParsedResult {
-	re := regexp.MustCompile(CityPattern)
+var (
+	CityMatcher = regexp.MustCompile(CityPattern)
+	CityListMatcher = regexp.MustCompile(CityListPattern)
+)
 
-	matches := re.FindAllSubmatch(content, -1)
+func CityParser(content []byte) engine.ParsedResult {
+	matches := CityMatcher.FindAllSubmatch(content, -1)
 	var results = engine.ParsedResult{}
 
 	for _, match := range matches {
@@ -34,9 +37,7 @@ func CityParser(content []byte) engine.ParsedResult {
 }
 
 func CityListParser(content []byte) engine.ParsedResult {
-	re := regexp.MustCompile(CityListPattern)
-
-	matches := re.FindAllSubmatch(content, -1)
+	matches := CityListMatcher.FindAllSubmatch(content, -1)
 	var results = engine.ParsedResult{}
 
 	for _, match := range matches {
