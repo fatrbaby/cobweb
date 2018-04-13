@@ -13,7 +13,7 @@ func main() {
 	}
 
 	runner := engine.ConcurrentEngine{
-		Scheduler:   &scheduler.SimpleScheduler{},
+		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
 	}
 

@@ -10,6 +10,13 @@ type ParsedResult struct {
 	Items   []interface{}
 }
 
+type Scheduler interface {
+	Submit(Spider)
+	SetMasterWorkerChannel(chan Spider)
+	WorkerReady(chan Spider)
+	Run()
+}
+
 func NilParser([]byte) ParsedResult {
 	return ParsedResult{}
 }

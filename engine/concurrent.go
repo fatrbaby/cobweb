@@ -7,22 +7,16 @@ type ConcurrentEngine struct {
 	WorkerCount int
 }
 
-type Scheduler interface {
-	Submit(Spider)
-	SetMasterWorkerChannel(chan Spider)
-}
-
 func (ce *ConcurrentEngine) Run(spiders ...Spider) {
+	ce.Scheduler.Run()
 	for _, spider := range spiders {
 		ce.Scheduler.Submit(spider)
 	}
 
-	in := make(chan Spider)
 	out := make(chan ParsedResult)
-	ce.Scheduler.SetMasterWorkerChannel(in)
 
 	for i := 0; i < ce.WorkerCount; i++ {
-		createWorker(in, out)
+		createWorker(out, ce.Scheduler)
 	}
 
 	for {
@@ -38,9 +32,12 @@ func (ce *ConcurrentEngine) Run(spiders ...Spider) {
 	}
 }
 
-func createWorker(in chan Spider, out chan ParsedResult) {
+func createWorker(out chan ParsedResult, scheduler Scheduler) {
+	in := make(chan Spider)
+
 	go func() {
 		for {
+			scheduler.WorkerReady(in)
 			spider := <-in
 			result, err := worker(spider)
 
