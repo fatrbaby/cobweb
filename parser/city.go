@@ -12,14 +12,14 @@ type City struct {
 
 const (
 	CityListPattern = `<a href="(http://www.zhenai.com/zhenghun/[\w]+)"[^>]*>([^<]+)</a>`
-	CityPattern = `href="(http://www.zhenai.com/zhenghun/[^"]+)"`
-	PersonPattern     = `<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a>`
+	CityPattern     = `href="(http://www.zhenai.com/zhenghun/[^"]+)"`
+	PersonPattern   = `<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a>`
 )
 
 var (
 	CityListMatcher = regexp.MustCompile(CityListPattern)
-	CityMather = regexp.MustCompile(CityPattern)
-	PersonMatcher = regexp.MustCompile(PersonPattern)
+	CityMather      = regexp.MustCompile(CityPattern)
+	PersonMatcher   = regexp.MustCompile(PersonPattern)
 )
 
 func CityParser(contents []byte) engine.ParsedResult {
@@ -28,8 +28,8 @@ func CityParser(contents []byte) engine.ParsedResult {
 
 	matches := CityMather.FindAllSubmatch(contents, -1)
 
-	for _, match := range matches{
-		results.Spiders = append(results.Spiders, engine.Spider{Url:string(match[1]), Parser:CityParser})
+	for _, match := range matches {
+		results.Spiders = append(results.Spiders, engine.Spider{Url: string(match[1]), Parser: CityParser})
 	}
 
 	// find person on city page

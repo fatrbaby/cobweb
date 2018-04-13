@@ -20,4 +20,3 @@ func (se *SimpleScheduler) Run() {
 func (se *SimpleScheduler) Submit(spider engine.Spider) {
 	go func() { se.workerChannel <- spider }()
 }
-

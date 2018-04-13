@@ -19,6 +19,7 @@ var (
 	ConstellationMatcher = regexp.MustCompile(`<td><span[^>]*>星座：</span><span field="">([^<]+)</span></td>`)
 	HouseMatcher         = regexp.MustCompile(`<td><span[^>]*>住房条件：</span><span field="">([^<]+)</span></td>`)
 	CarMatcher           = regexp.MustCompile(`<td><span[^>]*>是否购车：</span><span field="">([^<]+)</span></td>`)
+	RecommendMatcher       = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[\d]+)">([^<]+)</a>`)
 )
 
 func ProfileParser(contents []byte, name string) engine.ParsedResult {
@@ -39,6 +40,22 @@ func ProfileParser(contents []byte, name string) engine.ParsedResult {
 
 	result := engine.ParsedResult{
 		Items: []interface{}{profile},
+	}
+
+	matches := RecommendMatcher.FindAllSubmatch(contents, -1)
+
+	for _, match := range matches {
+		name := string(match[2])
+
+		result.Spiders = append(
+			result.Spiders,
+			engine.Spider{
+				Url:string(match[1]),
+				Parser: func(bytes []byte) engine.ParsedResult {
+					return ProfileParser(bytes, name)
+				},
+			},
+		)
 	}
 
 	return result

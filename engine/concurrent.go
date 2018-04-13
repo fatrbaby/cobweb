@@ -50,7 +50,7 @@ func (ce *ConcurrentEngine) Run(spiders ...Spider) {
 	}
 }
 
-func isDuplicate(url string) bool  {
+func isDuplicate(url string) bool {
 	if visited[url] {
 		return true
 	}
@@ -60,7 +60,7 @@ func isDuplicate(url string) bool  {
 	return false
 }
 
-func createWorker(in chan Spider, out chan ParsedResult,  notifier ReadyNotifier) {
+func createWorker(in chan Spider, out chan ParsedResult, notifier ReadyNotifier) {
 	go func() {
 		for {
 			notifier.WorkerReady(in)

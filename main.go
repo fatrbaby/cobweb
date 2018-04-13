@@ -8,10 +8,10 @@ import (
 
 func main() {
 	/*
-	spider := engine.Spider{
-		Url:    "http://www.zhenai.com/zhenghun",
-		Parser: parser.CityListParser,
-	}
+		spider := engine.Spider{
+			Url:    "http://www.zhenai.com/zhenghun",
+			Parser: parser.CityListParser,
+		}
 	*/
 
 	spider := engine.Spider{
