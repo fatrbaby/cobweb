@@ -9,12 +9,12 @@ type QueuedScheduler struct {
 	workerChannel chan chan engine.Spider
 }
 
-func (qs *QueuedScheduler) Submit(spider engine.Spider) {
-	qs.spiderChannel <- spider
+func (qs *QueuedScheduler) WorkerChannel() chan engine.Spider {
+	return make(chan engine.Spider)
 }
 
-func (qs *QueuedScheduler) SetMasterWorkerChannel(chan engine.Spider) {
-	panic("implement me")
+func (qs *QueuedScheduler) Submit(spider engine.Spider) {
+	qs.spiderChannel <- spider
 }
 
 func (qs *QueuedScheduler) WorkerReady(spider chan engine.Spider) {

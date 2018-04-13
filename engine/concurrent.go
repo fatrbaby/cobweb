@@ -16,7 +16,7 @@ func (ce *ConcurrentEngine) Run(spiders ...Spider) {
 	out := make(chan ParsedResult)
 
 	for i := 0; i < ce.WorkerCount; i++ {
-		createWorker(out, ce.Scheduler)
+		createWorker(ce.Scheduler.WorkerChannel(), out, ce.Scheduler)
 	}
 
 	for {
@@ -32,12 +32,10 @@ func (ce *ConcurrentEngine) Run(spiders ...Spider) {
 	}
 }
 
-func createWorker(out chan ParsedResult, scheduler Scheduler) {
-	in := make(chan Spider)
-
+func createWorker(in chan Spider, out chan ParsedResult,  notifier ReadyNotifier) {
 	go func() {
 		for {
-			scheduler.WorkerReady(in)
+			notifier.WorkerReady(in)
 			spider := <-in
 			result, err := worker(spider)
 
