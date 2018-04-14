@@ -2,13 +2,15 @@ package engine
 
 type Spider struct {
 	Url    string
-	Parser func([]byte) ParsedResult
+	Parser Parser
 }
 
 type ParsedResult struct {
 	Spiders []Spider
 	Items   []Item
 }
+
+type Parser func(contents []byte, url string) ParsedResult
 
 type Item struct {
 	Id string

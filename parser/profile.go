@@ -53,16 +53,11 @@ func ProfileParser(contents []byte, url string, name string) engine.ParsedResult
 	matches := RecommendMatcher.FindAllSubmatch(contents, -1)
 
 	for _, match := range matches {
-		url := string(match[1])
-		name := string(match[2])
-
 		result.Spiders = append(
 			result.Spiders,
 			engine.Spider{
-				Url: url,
-				Parser: func(bytes []byte) engine.ParsedResult {
-					return ProfileParser(bytes, url, name)
-				},
+				Url: string(match[1]),
+				Parser: ProfileParserBridge(string(match[2])),
 			},
 		)
 	}
@@ -90,4 +85,10 @@ func extractInt(contents []byte, matcher *regexp.Regexp) int {
 	}
 
 	return num
+}
+
+func ProfileParserBridge(name string) engine.Parser {
+	return func(contents []byte, url string) engine.ParsedResult {
+		return ProfileParser(contents, url, name)
+	}
 }

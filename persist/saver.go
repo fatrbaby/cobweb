@@ -8,7 +8,13 @@ import (
 	"log"
 )
 
-func ItemSaver() chan engine.Item {
+func ItemSaver(index string) (chan engine.Item, error) {
+	client, err := elastic.NewClient(elastic.SetSniff(false))
+
+	if err != nil {
+		return nil, err
+	}
+
 	out := make(chan engine.Item)
 
 	go func() {
@@ -17,29 +23,23 @@ func ItemSaver() chan engine.Item {
 		for {
 			item := <- out
 			log.Printf("Got item #%d: %v\n", n, item)
-			if err := save(item); err != nil {
+			if err := save(client, index, item); err != nil {
 				log.Printf("save item %v error: %v", item, err)
 			}
 			n++
 		}
 	}()
 
-	return out
+	return out, nil
 }
 
-func save(item engine.Item) error  {
-	client, err := elastic.NewClient(elastic.SetSniff(false))
-
-	if err != nil {
-		return err
-	}
-
+func save(client *elastic.Client, index string, item engine.Item) error  {
 	if item.Type == "" {
 		return errors.New("must supply Type")
 	}
 
 	indexer := client.Index().
-		Index("dating_profile").
+		Index(index).
 		Type(item.Type).
 		BodyJson(item)
 
@@ -47,7 +47,7 @@ func save(item engine.Item) error  {
 		indexer.Id(item.Id)
 	}
 
-	_, err = indexer.Do(context.Background())
+	_, err := indexer.Do(context.Background())
 
 	return err
 }

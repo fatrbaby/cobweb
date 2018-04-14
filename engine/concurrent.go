@@ -62,7 +62,7 @@ func createWorker(in chan Spider, out chan ParsedResult, notifier ReadyNotifier)
 		for {
 			notifier.WorkerReady(in)
 			spider := <-in
-			result, err := worker(spider)
+			result, err := Worker(spider)
 
 			if err != nil {
 				continue

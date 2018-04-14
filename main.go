@@ -8,6 +8,11 @@ import (
 )
 
 func main() {
+	saver, err := persist.ItemSaver("dating_profile")
+
+	if err != nil {
+		panic(err)
+	}
 	spider := engine.Spider{
 		Url:    "http://www.zhenai.com/zhenghun",
 		Parser: parser.CityListParser,
@@ -18,10 +23,11 @@ func main() {
 		Parser: parser.CityParser,
 	}
 	*/
+
 	runner := engine.ConcurrentEngine{
 		Scheduler:   &scheduler.QueuedScheduler{},
-		WorkerCount: 100,
-		ItemChannel: persist.ItemSaver(),
+		WorkerCount: 50,
+		ItemChannel: saver,
 	}
 
 	runner.Run(spider)

@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"github.com/fatrbaby/cobweb/crawler"
 	"log"
 )
 
@@ -19,7 +18,7 @@ func (se *SimpleEngine) Run(spiders ...Spider) {
 		seed := seeds[0]
 		seeds = seeds[1:]
 
-		result, err := worker(seed)
+		result, err := Worker(seed)
 
 		if err != nil {
 			continue
@@ -33,13 +32,3 @@ func (se *SimpleEngine) Run(spiders ...Spider) {
 	}
 }
 
-func worker(spider Spider) (ParsedResult, error) {
-	body, err := crawler.Fetch(spider.Url, true)
-
-	if err != nil {
-		log.Printf("Fetch error on fetching: %s, %v\n", spider.Url, err)
-		return ParsedResult{}, err
-	}
-
-	return spider.Parser(body), nil
-}

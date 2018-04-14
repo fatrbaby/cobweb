@@ -22,7 +22,7 @@ var (
 	PersonMatcher   = regexp.MustCompile(PersonPattern)
 )
 
-func CityParser(contents []byte) engine.ParsedResult {
+func CityParser(contents []byte, _ string) engine.ParsedResult {
 	// find cities
 	var results = engine.ParsedResult{}
 
@@ -36,19 +36,17 @@ func CityParser(contents []byte) engine.ParsedResult {
 	matches = PersonMatcher.FindAllSubmatch(contents, -1)
 
 	for _, match := range matches {
-		url := string(match[1])
-		name := string(match[2])
-		parser := func(c []byte) engine.ParsedResult {
-			return ProfileParser(c, url, name)
-		}
-		results.Spiders = append(results.Spiders, engine.Spider{Url: url, Parser: parser})
+		results.Spiders = append(results.Spiders, engine.Spider{
+			Url: string(match[1]),
+			Parser: ProfileParserBridge(string(match[2])),
+		})
 	}
 
 	return results
 }
 
-func CityListParser(content []byte) engine.ParsedResult {
-	matches := CityListMatcher.FindAllSubmatch(content, -1)
+func CityListParser(contents []byte, _ string) engine.ParsedResult {
+	matches := CityListMatcher.FindAllSubmatch(contents, -1)
 	var results = engine.ParsedResult{}
 
 	for _, match := range matches {
