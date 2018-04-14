@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"fmt"
 	"github.com/fatrbaby/cobweb/entity"
 )
 
@@ -10,6 +9,7 @@ var visited = make(map[string]bool)
 type ConcurrentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
+	ItemChannel chan Item
 }
 
 func (ce *ConcurrentEngine) Run(spiders ...Spider) {
@@ -28,15 +28,12 @@ func (ce *ConcurrentEngine) Run(spiders ...Spider) {
 		createWorker(ce.Scheduler.WorkerChannel(), out, ce.Scheduler)
 	}
 
-	personCount := 0
-
 	for {
 		result := <-out
 
 		for _, item := range result.Items {
-			if _, ok := item.(entity.Profile); ok {
-				personCount++
-				fmt.Printf("Got item [%d]:%v\n", personCount, item)
+			if _, ok := item.Payload.(entity.Profile); ok {
+				go func() { ce.ItemChannel <- item }()
 			}
 		}
 

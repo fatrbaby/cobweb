@@ -1,5 +1,7 @@
 package entity
 
+import "encoding/json"
+
 type Profile struct {
 	Name          string
 	Gender        string
@@ -13,4 +15,17 @@ type Profile struct {
 	Constellation string // 星座
 	House         string
 	Car           string
+}
+
+func FromJsonObject(obj interface{}) (Profile, error)  {
+	var profile Profile
+	j, err := json.Marshal(obj)
+
+	if err != nil {
+		return profile, err
+	}
+
+	err = json.Unmarshal(j, &profile)
+
+	return profile, err
 }

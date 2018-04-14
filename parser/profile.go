@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	UrlIdMatcher = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
 	AgeMatcher           = regexp.MustCompile(`<td><span[^>]*>年龄：</span>([\d]+)岁</td>`)
 	GenderMatcher        = regexp.MustCompile(`<td><span[^>]*>性别：</span><span field="">([^<]+)</span></td>`)
 	MarriageMatcher      = regexp.MustCompile(`<td><span[^>]*>婚况：</span>([^<]+)</td>`)
@@ -22,7 +23,7 @@ var (
 	RecommendMatcher       = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[\d]+)">([^<]+)</a>`)
 )
 
-func ProfileParser(contents []byte, name string) engine.ParsedResult {
+func ProfileParser(contents []byte, url string, name string) engine.ParsedResult {
 	profile := entity.Profile{}
 
 	profile.Name = name
@@ -39,20 +40,28 @@ func ProfileParser(contents []byte, name string) engine.ParsedResult {
 	profile.Car = extractString(contents, CarMatcher)
 
 	result := engine.ParsedResult{
-		Items: []interface{}{profile},
+		Items: []engine.Item{
+			{
+				Id: extractString([]byte(url), UrlIdMatcher),
+				Url: url,
+				Type: "zhenai",
+				Payload: profile,
+			},
+		},
 	}
 
 	matches := RecommendMatcher.FindAllSubmatch(contents, -1)
 
 	for _, match := range matches {
+		url := string(match[1])
 		name := string(match[2])
 
 		result.Spiders = append(
 			result.Spiders,
 			engine.Spider{
-				Url:string(match[1]),
+				Url: url,
 				Parser: func(bytes []byte) engine.ParsedResult {
-					return ProfileParser(bytes, name)
+					return ProfileParser(bytes, url, name)
 				},
 			},
 		)

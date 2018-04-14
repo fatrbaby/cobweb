@@ -36,12 +36,12 @@ func CityParser(contents []byte) engine.ParsedResult {
 	matches = PersonMatcher.FindAllSubmatch(contents, -1)
 
 	for _, match := range matches {
+		url := string(match[1])
 		name := string(match[2])
-		results.Items = append(results.Items, name)
 		parser := func(c []byte) engine.ParsedResult {
-			return ProfileParser(c, name)
+			return ProfileParser(c, url, name)
 		}
-		results.Spiders = append(results.Spiders, engine.Spider{Url: string(match[1]), Parser: parser})
+		results.Spiders = append(results.Spiders, engine.Spider{Url: url, Parser: parser})
 	}
 
 	return results
@@ -52,7 +52,6 @@ func CityListParser(content []byte) engine.ParsedResult {
 	var results = engine.ParsedResult{}
 
 	for _, match := range matches {
-		results.Items = append(results.Items, string(match[2]))
 		results.Spiders = append(results.Spiders, engine.Spider{Url: string(match[1]), Parser: CityParser})
 	}
 

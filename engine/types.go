@@ -7,7 +7,14 @@ type Spider struct {
 
 type ParsedResult struct {
 	Spiders []Spider
-	Items   []interface{}
+	Items   []Item
+}
+
+type Item struct {
+	Id string
+	Url string
+	Type string
+	Payload interface{}
 }
 
 type Scheduler interface {
