@@ -13,9 +13,9 @@ type ParsedResult struct {
 type Parser func(contents []byte, url string) ParsedResult
 
 type Item struct {
-	Id string
-	Url string
-	Type string
+	Id      string
+	Url     string
+	Type    string
 	Payload interface{}
 }
 

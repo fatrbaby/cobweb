@@ -18,10 +18,10 @@ func main() {
 		Parser: parser.CityListParser,
 	}
 	/*
-	spider := engine.Spider{
-		Url:    "http://www.zhenai.com/zhenghun/chengdu",
-		Parser: parser.CityParser,
-	}
+		spider := engine.Spider{
+			Url:    "http://www.zhenai.com/zhenghun/chengdu",
+			Parser: parser.CityParser,
+		}
 	*/
 
 	runner := engine.ConcurrentEngine{

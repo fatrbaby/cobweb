@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	UrlIdMatcher = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
+	UrlIdMatcher         = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
 	AgeMatcher           = regexp.MustCompile(`<td><span[^>]*>年龄：</span>([\d]+)岁</td>`)
 	GenderMatcher        = regexp.MustCompile(`<td><span[^>]*>性别：</span><span field="">([^<]+)</span></td>`)
 	MarriageMatcher      = regexp.MustCompile(`<td><span[^>]*>婚况：</span>([^<]+)</td>`)
@@ -20,7 +20,7 @@ var (
 	ConstellationMatcher = regexp.MustCompile(`<td><span[^>]*>星座：</span><span field="">([^<]+)</span></td>`)
 	HouseMatcher         = regexp.MustCompile(`<td><span[^>]*>住房条件：</span><span field="">([^<]+)</span></td>`)
 	CarMatcher           = regexp.MustCompile(`<td><span[^>]*>是否购车：</span><span field="">([^<]+)</span></td>`)
-	RecommendMatcher       = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[\d]+)">([^<]+)</a>`)
+	RecommendMatcher     = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[\d]+)">([^<]+)</a>`)
 )
 
 func ProfileParser(contents []byte, url string, name string) engine.ParsedResult {
@@ -42,9 +42,9 @@ func ProfileParser(contents []byte, url string, name string) engine.ParsedResult
 	result := engine.ParsedResult{
 		Items: []engine.Item{
 			{
-				Id: extractString([]byte(url), UrlIdMatcher),
-				Url: url,
-				Type: "zhenai",
+				Id:      extractString([]byte(url), UrlIdMatcher),
+				Url:     url,
+				Type:    "zhenai",
 				Payload: profile,
 			},
 		},
@@ -56,7 +56,7 @@ func ProfileParser(contents []byte, url string, name string) engine.ParsedResult
 		result.Spiders = append(
 			result.Spiders,
 			engine.Spider{
-				Url: string(match[1]),
+				Url:    string(match[1]),
 				Parser: ProfileParserBridge(string(match[2])),
 			},
 		)

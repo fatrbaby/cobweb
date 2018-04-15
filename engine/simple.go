@@ -31,4 +31,3 @@ func (se *SimpleEngine) Run(spiders ...Spider) {
 		}
 	}
 }
-

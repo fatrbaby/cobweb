@@ -17,7 +17,7 @@ type Profile struct {
 	Car           string
 }
 
-func FromJsonObject(obj interface{}) (Profile, error)  {
+func FromJsonObject(obj interface{}) (Profile, error) {
 	var profile Profile
 	j, err := json.Marshal(obj)
 
