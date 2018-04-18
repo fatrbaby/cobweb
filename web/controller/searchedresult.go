@@ -24,7 +24,7 @@ func NewSearchedResultHandler(template string) SearchedResultHandler {
 		panic(err)
 	}
 
-	return SearchedResultHandler{client:client, view:view.CreateSearchedResultView(template)}
+	return SearchedResultHandler{client: client, view: view.CreateSearchedResultView(template)}
 }
 
 func (that SearchedResultHandler) ServeHTTP(response http.ResponseWriter, request *http.Request) {
@@ -50,7 +50,7 @@ func (that SearchedResultHandler) ServeHTTP(response http.ResponseWriter, reques
 	}
 }
 
-func (that SearchedResultHandler)searchFromElastic(q string, from int) (model.SearchedResult, error)  {
+func (that SearchedResultHandler) searchFromElastic(q string, from int) (model.SearchedResult, error) {
 	var result model.SearchedResult
 	result.Query = q
 	q = rewriteQueryString(q)

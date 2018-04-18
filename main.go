@@ -22,18 +22,18 @@ func main() {
 
 	app.Commands = []cli.Command{
 		{
-			Name: "web",
-			Usage: "run web server",
+			Name:   "web",
+			Usage:  "run web server",
 			Action: commandWeb,
 		},
 		{
-			Name: "crawling",
-			Usage: "crawling data from target",
+			Name:   "crawling",
+			Usage:  "crawling data from target",
 			Action: commandCrawling,
 		},
 		{
-			Name: "rpc",
-			Usage: "start rpc server",
+			Name:   "rpc",
+			Usage:  "start rpc server",
 			Action: commandRpc,
 		},
 	}
@@ -45,7 +45,7 @@ func main() {
 	}
 }
 
-func commandCrawling(_ *cli.Context)  {
+func commandCrawling(_ *cli.Context) {
 	// saver, err := persist.ItemSaver("dating_profile")
 	saver, err := Persist.ItemSaver(":8700")
 
@@ -85,7 +85,7 @@ func commandRpc(_ *cli.Context) {
 
 	err = distributed.ServeRpc(":8700", Persist.ItemSaverService{
 		Client: client,
-		Index: "dating_profile",
+		Index:  "dating_profile",
 	})
 
 	if err != nil {

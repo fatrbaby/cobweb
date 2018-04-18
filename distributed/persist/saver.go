@@ -10,10 +10,10 @@ import (
 
 type ItemSaverService struct {
 	Client *elastic.Client
-	Index string
+	Index  string
 }
 
-func (is *ItemSaverService)Save(item engine.Item, result *string) error {
+func (is *ItemSaverService) Save(item engine.Item, result *string) error {
 	err := persist.Save(is.Client, is.Index, item)
 
 	if err == nil {

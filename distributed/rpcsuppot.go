@@ -8,7 +8,10 @@ import (
 )
 
 func ServeRpc(host string, service interface{}) error {
-	rpc.Register(service)
+	if err := rpc.Register(service); err != nil {
+		return err
+	}
+
 	listener, err := net.Listen("tcp", host)
 	log.Printf("Listen on %s", host)
 
