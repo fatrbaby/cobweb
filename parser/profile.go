@@ -23,10 +23,14 @@ var (
 	RecommendMatcher     = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[\d]+)">([^<]+)</a>`)
 )
 
-func ProfileParser(contents []byte, url string, name string) engine.ParsedResult {
+type ProfileParser struct {
+	username string
+}
+
+func (p *ProfileParser) Parse(contents []byte, url string) engine.ParsedResult {
 	profile := entity.Profile{}
 
-	profile.Name = name
+	profile.Name = p.username
 	profile.Age = extractInt(contents, AgeMatcher)
 	profile.Gender = extractString(contents, GenderMatcher)
 	profile.Marriage = extractString(contents, MarriageMatcher)
@@ -57,12 +61,16 @@ func ProfileParser(contents []byte, url string, name string) engine.ParsedResult
 			result.Spiders,
 			engine.Spider{
 				Url:    string(match[1]),
-				Parser: ProfileParserBridge(string(match[2])),
+				Parser: &ProfileParser{username: string(match[2])},
 			},
 		)
 	}
 
 	return result
+}
+
+func (p *ProfileParser) Serialize() (name string, args interface{}) {
+	return "ProfileParser", p.username
 }
 
 func extractString(contents []byte, matcher *regexp.Regexp) string {
@@ -85,10 +93,4 @@ func extractInt(contents []byte, matcher *regexp.Regexp) int {
 	}
 
 	return num
-}
-
-func ProfileParserBridge(name string) engine.Parser {
-	return func(contents []byte, url string) engine.ParsedResult {
-		return ProfileParser(contents, url, name)
-	}
 }

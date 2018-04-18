@@ -13,5 +13,5 @@ func Worker(spider Spider) (ParsedResult, error) {
 		return ParsedResult{}, err
 	}
 
-	return spider.Parser(body, spider.Url), nil
+	return spider.Parser.Parse(body, spider.Url), nil
 }

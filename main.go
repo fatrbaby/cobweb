@@ -5,6 +5,7 @@ import (
 	Persist "github.com/fatrbaby/cobweb/distributed/persist"
 	"github.com/fatrbaby/cobweb/engine"
 	"github.com/fatrbaby/cobweb/parser"
+	"github.com/fatrbaby/cobweb/persist"
 	"github.com/fatrbaby/cobweb/scheduler"
 	"github.com/fatrbaby/cobweb/web/controller"
 	"github.com/urfave/cli"
@@ -27,7 +28,7 @@ func main() {
 			Action: commandWeb,
 		},
 		{
-			Name:   "crawling",
+			Name:   "crawl",
 			Usage:  "crawling data from target",
 			Action: commandCrawling,
 		},
@@ -46,8 +47,8 @@ func main() {
 }
 
 func commandCrawling(_ *cli.Context) {
-	// saver, err := persist.ItemSaver("dating_profile")
-	saver, err := Persist.ItemSaver(":8700")
+	saver, err := persist.ItemSaver("dating_profile")
+	// saver, err := Persist.ItemSaver(":8700")
 
 	if err != nil {
 		panic(err)
@@ -55,7 +56,7 @@ func commandCrawling(_ *cli.Context) {
 
 	spider := engine.Spider{
 		Url:    "http://www.zhenai.com/zhenghun",
-		Parser: parser.CityListParser,
+		Parser: &parser.CityListParser{},
 	}
 
 	runner := engine.ConcurrentEngine{

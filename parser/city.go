@@ -5,11 +5,6 @@ import (
 	"regexp"
 )
 
-type City struct {
-	Name []byte
-	Link []byte
-}
-
 const (
 	CityListPattern = `<a href="(http://www.zhenai.com/zhenghun/[\w]+)"[^>]*>([^<]+)</a>`
 	CityPattern     = `href="(http://www.zhenai.com/zhenghun/[^"]+)"`
@@ -22,14 +17,19 @@ var (
 	PersonMatcher   = regexp.MustCompile(PersonPattern)
 )
 
-func CityParser(contents []byte, _ string) engine.ParsedResult {
+type CityParser struct{}
+
+func (cp *CityParser) Parse(contents []byte, _ string) engine.ParsedResult {
 	// find cities
 	var results = engine.ParsedResult{}
 
 	matches := CityMather.FindAllSubmatch(contents, -1)
 
 	for _, match := range matches {
-		results.Spiders = append(results.Spiders, engine.Spider{Url: string(match[1]), Parser: CityParser})
+		results.Spiders = append(results.Spiders, engine.Spider{
+			Url:    string(match[1]),
+			Parser: &CityParser{},
+		})
 	}
 
 	// find person on city page
@@ -38,20 +38,30 @@ func CityParser(contents []byte, _ string) engine.ParsedResult {
 	for _, match := range matches {
 		results.Spiders = append(results.Spiders, engine.Spider{
 			Url:    string(match[1]),
-			Parser: ProfileParserBridge(string(match[2])),
+			Parser: &ProfileParser{username: string(match[2])},
 		})
 	}
 
 	return results
 }
 
-func CityListParser(contents []byte, _ string) engine.ParsedResult {
+func (cp *CityParser) Serialize() (name string, args interface{}) {
+	return "CityParser", nil
+}
+
+type CityListParser struct{}
+
+func (cp *CityListParser) Parse(contents []byte, _ string) engine.ParsedResult {
 	matches := CityListMatcher.FindAllSubmatch(contents, -1)
 	var results = engine.ParsedResult{}
 
 	for _, match := range matches {
-		results.Spiders = append(results.Spiders, engine.Spider{Url: string(match[1]), Parser: CityParser})
+		results.Spiders = append(results.Spiders, engine.Spider{Url: string(match[1]), Parser: &CityParser{}})
 	}
 
 	return results
+}
+
+func (cp *CityListParser) Serialize() (name string, args interface{}) {
+	return "CityListParser", nil
 }

@@ -5,13 +5,6 @@ type Spider struct {
 	Parser Parser
 }
 
-type ParsedResult struct {
-	Spiders []Spider
-	Items   []Item
-}
-
-type Parser func(contents []byte, url string) ParsedResult
-
 type Item struct {
 	Id      string
 	Url     string
@@ -30,6 +23,7 @@ type ReadyNotifier interface {
 	WorkerReady(chan Spider)
 }
 
-func NilParser([]byte) ParsedResult {
-	return ParsedResult{}
+type ParsedResult struct {
+	Spiders []Spider
+	Items   []Item
 }
