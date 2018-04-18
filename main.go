@@ -1,12 +1,14 @@
 package main
 
 import (
+	"github.com/fatrbaby/cobweb/distributed"
+	Persist "github.com/fatrbaby/cobweb/distributed/persist"
 	"github.com/fatrbaby/cobweb/engine"
 	"github.com/fatrbaby/cobweb/parser"
-	"github.com/fatrbaby/cobweb/persist"
 	"github.com/fatrbaby/cobweb/scheduler"
 	"github.com/fatrbaby/cobweb/web/controller"
 	"github.com/urfave/cli"
+	"gopkg.in/olivere/elastic.v5"
 	"log"
 	"net/http"
 	"os"
@@ -22,16 +24,17 @@ func main() {
 		{
 			Name: "web",
 			Usage: "run web server",
-			Action: func(context *cli.Context) {
-				web()
-			},
+			Action: commandWeb,
 		},
 		{
 			Name: "crawling",
 			Usage: "crawling data from target",
-			Action: func(context *cli.Context) {
-				crawling()
-			},
+			Action: commandCrawling,
+		},
+		{
+			Name: "rpc",
+			Usage: "start rpc server",
+			Action: commandRpc,
 		},
 	}
 
@@ -42,8 +45,9 @@ func main() {
 	}
 }
 
-func crawling()  {
-	saver, err := persist.ItemSaver("dating_profile")
+func commandCrawling(_ *cli.Context)  {
+	// saver, err := persist.ItemSaver("dating_profile")
+	saver, err := Persist.ItemSaver(":8700")
 
 	if err != nil {
 		panic(err)
@@ -63,11 +67,28 @@ func crawling()  {
 	runner.Run(spider)
 }
 
-func web() {
+func commandWeb(_ *cli.Context) {
 	http.Handle("/", http.FileServer(http.Dir("web/resources/assets")))
 	http.Handle("/search", controller.NewSearchedResultHandler("web/resources/list.html"))
 	err := http.ListenAndServe(":8090", nil)
 	if err != nil {
 		panic(err)
+	}
+}
+
+func commandRpc(_ *cli.Context) {
+	client, err := elastic.NewClient(elastic.SetSniff(false))
+
+	if err != nil {
+		panic(err)
+	}
+
+	err = distributed.ServeRpc(":8700", Persist.ItemSaverService{
+		Client: client,
+		Index: "dating_profile",
+	})
+
+	if err != nil {
+		log.Fatal(err)
 	}
 }
