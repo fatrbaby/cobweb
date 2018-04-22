@@ -1,5 +1,5 @@
 package config
 
 const (
-	WorkerHost = 7900
+	QPS = 20
 )
