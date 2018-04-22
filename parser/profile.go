@@ -24,13 +24,13 @@ var (
 )
 
 type ProfileParser struct {
-	username string
+	Username string
 }
 
 func (p *ProfileParser) Parse(contents []byte, url string) engine.ParsedResult {
 	profile := entity.Profile{}
 
-	profile.Name = p.username
+	profile.Name = p.Username
 	profile.Age = extractInt(contents, AgeMatcher)
 	profile.Gender = extractString(contents, GenderMatcher)
 	profile.Marriage = extractString(contents, MarriageMatcher)
@@ -61,7 +61,7 @@ func (p *ProfileParser) Parse(contents []byte, url string) engine.ParsedResult {
 			result.Spiders,
 			engine.Spider{
 				Url:    string(match[1]),
-				Parser: &ProfileParser{username: string(match[2])},
+				Parser: &ProfileParser{Username: string(match[2])},
 			},
 		)
 	}
@@ -70,7 +70,7 @@ func (p *ProfileParser) Parse(contents []byte, url string) engine.ParsedResult {
 }
 
 func (p *ProfileParser) Serialize() (name string, args interface{}) {
-	return "ProfileParser", p.username
+	return "ProfileParser", p.Username
 }
 
 func extractString(contents []byte, matcher *regexp.Regexp) string {

@@ -38,7 +38,7 @@ func (cp *CityParser) Parse(contents []byte, _ string) engine.ParsedResult {
 	for _, match := range matches {
 		results.Spiders = append(results.Spiders, engine.Spider{
 			Url:    string(match[1]),
-			Parser: &ProfileParser{username: string(match[2])},
+			Parser: &ProfileParser{Username: string(match[2])},
 		})
 	}
 
