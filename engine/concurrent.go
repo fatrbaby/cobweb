@@ -6,10 +6,13 @@ import (
 
 var visited = make(map[string]bool)
 
+type Processor func(Spider) (ParsedResult, error)
+
 type ConcurrentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
 	ItemChannel chan Item
+	Processor   Processor
 }
 
 func (ce *ConcurrentEngine) Run(spiders ...Spider) {
@@ -25,7 +28,7 @@ func (ce *ConcurrentEngine) Run(spiders ...Spider) {
 	out := make(chan ParsedResult)
 
 	for i := 0; i < ce.WorkerCount; i++ {
-		createWorker(ce.Scheduler.WorkerChannel(), out, ce.Scheduler)
+		ce.CreateWorker(ce.Scheduler.WorkerChannel(), out, ce.Scheduler)
 	}
 
 	for {
@@ -57,12 +60,12 @@ func isDuplicate(url string) bool {
 	return false
 }
 
-func createWorker(in chan Spider, out chan ParsedResult, notifier ReadyNotifier) {
+func (ce ConcurrentEngine)CreateWorker(in chan Spider, out chan ParsedResult, notifier ReadyNotifier) {
 	go func() {
 		for {
 			notifier.WorkerReady(in)
 			spider := <-in
-			result, err := Worker(spider)
+			result, err := ce.Processor(spider)
 
 			if err != nil {
 				continue

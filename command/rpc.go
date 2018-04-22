@@ -5,7 +5,6 @@ import (
 	"github.com/fatrbaby/cobweb/distributed"
 	"github.com/fatrbaby/cobweb/distributed/persist"
 	"github.com/fatrbaby/cobweb/distributed/worker"
-	"github.com/fatrbaby/imooc-crawler/crawler_distributed/rpcsupport"
 	"github.com/urfave/cli"
 	"gopkg.in/olivere/elastic.v5"
 	"log"
@@ -57,7 +56,7 @@ func ServeRpcWorker() cli.Command {
 		Action: func(context *cli.Context) {
 			port := context.Int("port")
 
-			err := rpcsupport.ServeRpc(fmt.Sprintf(":%d", port), &worker.CrawlService{})
+			err := distributed.ServeRpc(fmt.Sprintf(":%d", port), &worker.CrawlService{})
 
 			if err != nil {
 				log.Fatal(err)
