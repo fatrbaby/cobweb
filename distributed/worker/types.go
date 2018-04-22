@@ -55,7 +55,7 @@ func DeserializeSpider(spider Spider) (engine.Spider, error) {
 	return engine.Spider{Url: spider.Url, Parser: p}, nil
 }
 
-func DeserializeResult(r ParsedResult) engine.ParsedResult  {
+func DeserializeResult(r ParsedResult) engine.ParsedResult {
 	result := engine.ParsedResult{Items: r.Items}
 
 	for _, spider := range r.Spiders {

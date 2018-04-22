@@ -60,7 +60,7 @@ func isDuplicate(url string) bool {
 	return false
 }
 
-func (ce ConcurrentEngine)CreateWorker(in chan Spider, out chan ParsedResult, notifier ReadyNotifier) {
+func (ce ConcurrentEngine) CreateWorker(in chan Spider, out chan ParsedResult, notifier ReadyNotifier) {
 	go func() {
 		for {
 			notifier.WorkerReady(in)

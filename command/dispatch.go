@@ -16,7 +16,7 @@ func Dispatch() cli.Command {
 		Name: "dispatch",
 		Flags: []cli.Flag{
 			cli.IntFlag{
-				Name: "saver-port",
+				Name:  "saver-port",
 				Value: 8700,
 				Usage: "the port of saver rpc server listening",
 			},
@@ -26,7 +26,7 @@ func Dispatch() cli.Command {
 				Usage: "the index of storage",
 			},
 			cli.StringFlag{
-				Name: "worker-ports",
+				Name:  "worker-ports",
 				Value: ":7900,:7901",
 				Usage: "the ports of worker rpc sever listening (comma separated)",
 			},
@@ -51,7 +51,7 @@ func Dispatch() cli.Command {
 				Scheduler:   &scheduler.QueuedScheduler{},
 				WorkerCount: 50,
 				ItemChannel: saver,
-				Processor: processor,
+				Processor:   processor,
 			}
 
 			runner.Run(spider)
@@ -61,7 +61,7 @@ func Dispatch() cli.Command {
 	return command
 }
 
-func parseHosts(hostsConfig string) []string  {
+func parseHosts(hostsConfig string) []string {
 	hosts := strings.Split(hostsConfig, ",")
 
 	for i, host := range hosts {
