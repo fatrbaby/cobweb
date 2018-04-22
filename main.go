@@ -14,7 +14,7 @@ func main() {
 	app.Version = "0.5.0"
 
 	app.Commands = []cli.Command{
-		command.StartCrawl(),
+		command.Dispatch(),
 		command.ServeWeb(),
 		command.ServeRpcWorker(),
 		command.ServeRpcSaver(),

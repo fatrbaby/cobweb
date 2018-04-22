@@ -1,6 +1,7 @@
 package command
 
 import (
+	"fmt"
 	"github.com/fatrbaby/cobweb/distributed/persist"
 	"github.com/fatrbaby/cobweb/distributed/worker"
 	"github.com/fatrbaby/cobweb/engine"
@@ -10,10 +11,15 @@ import (
 	"strings"
 )
 
-func StartCrawl() cli.Command {
+func Dispatch() cli.Command {
 	command := cli.Command{
-		Name: "crawl",
+		Name: "dispatch",
 		Flags: []cli.Flag{
+			cli.IntFlag{
+				Name: "saver-port",
+				Value: 8700,
+				Usage: "the port of saver rpc server listening",
+			},
 			cli.StringFlag{
 				Name:  "index",
 				Value: "dating_profile",
@@ -27,13 +33,13 @@ func StartCrawl() cli.Command {
 		},
 		Action: func(context *cli.Context) {
 			//saver, err := persist.ItemSaver(context.String("index"))
-			saver, err := persist.ItemSaver(":8700")
+			saver, err := persist.ItemSaver(fmt.Sprintf(":%d", context.Int("saver-port")))
 
 			if err != nil {
 				panic(err)
 			}
 
-			pool := worker.CreateClientPool(strings.Split(context.String("worker-ports"), ","))
+			pool := worker.CreateClientPool(parseHosts(context.String("worker-ports")))
 			processor := worker.CreateProcessor(pool)
 
 			spider := engine.Spider{
@@ -53,4 +59,16 @@ func StartCrawl() cli.Command {
 	}
 
 	return command
+}
+
+func parseHosts(hostsConfig string) []string  {
+	hosts := strings.Split(hostsConfig, ",")
+
+	for i, host := range hosts {
+		if !strings.HasPrefix(host, ":") {
+			hosts[i] = ":" + host
+		}
+	}
+
+	return hosts
 }

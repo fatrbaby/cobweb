@@ -1,8 +1,9 @@
 package worker
 
 import (
+	"github.com/fatrbaby/cobweb/distributed"
 	"github.com/fatrbaby/cobweb/engine"
-	"github.com/fatrbaby/imooc-crawler/crawler_distributed/rpcsupport"
+	"log"
 	"net/rpc"
 )
 
@@ -26,12 +27,13 @@ func CreateClientPool(hosts []string) chan *rpc.Client {
 	var clients []*rpc.Client
 
 	for _, host := range hosts {
-		client, err := rpcsupport.NewClient(host)
+		client, err := distributed.NewClient(host)
 
 		if err != nil {
 			continue
 		}
 
+		log.Printf("conneted to worker: %s", host)
 		clients = append(clients, client)
 	}
 
