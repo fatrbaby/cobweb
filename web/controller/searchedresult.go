@@ -78,5 +78,8 @@ func NewSearchedResultHandler(template string) SearchedResultHandler {
 		panic(err)
 	}
 
-	return SearchedResultHandler{client: client, view: view.CreateSearchedResultView(template)}
+	return SearchedResultHandler{
+		client: client,
+		view: view.CreateSearchedResultView(view.Load(template)),
+	}
 }

@@ -3,6 +3,7 @@ package command
 import (
 	"fmt"
 	"github.com/fatrbaby/cobweb/web/controller"
+	"github.com/fatrbaby/cobweb/web/view"
 	"github.com/urfave/cli"
 	"log"
 	"net/http"
@@ -20,11 +21,13 @@ func ServeWeb() cli.Command {
 		},
 		Action: func(context *cli.Context) {
 			port := context.Int("port")
+			view.SetViewPath("web/resources/views")
 
 			staticFilesHandler := http.FileServer(http.Dir("web/resources/assets"))
+
 			http.Handle("/assets/", http.StripPrefix("/assets/", staticFilesHandler))
-			http.Handle("/", controller.NewHomeHandler("web/resources/home.html"))
-			http.Handle("/search", controller.NewSearchedResultHandler("web/resources/list.html"))
+			http.Handle("/", controller.NewHomeHandler("home.html"))
+			http.Handle("/search", controller.NewSearchedResultHandler("list.html"))
 
 			log.Printf("Serve on %d", port)
 

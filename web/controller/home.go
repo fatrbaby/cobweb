@@ -19,6 +19,6 @@ func (that HomeHandler) ServeHTTP(response http.ResponseWriter, request *http.Re
 
 func NewHomeHandler(template string) HomeHandler {
 	return HomeHandler{
-		view: view.CreateHomeView(template),
+		view: view.CreateHomeView(view.Load(template)),
 	}
 }
