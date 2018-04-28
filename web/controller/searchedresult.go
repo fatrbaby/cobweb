@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"context"
-	"github.com/fatrbaby/cobweb/engine"
 	"github.com/fatrbaby/cobweb/web/model"
 	"github.com/fatrbaby/cobweb/web/view"
 	"gopkg.in/olivere/elastic.v5"
@@ -15,16 +13,6 @@ import (
 type SearchedResultHandler struct {
 	view   view.SearchedResultView
 	client *elastic.Client
-}
-
-func NewSearchedResultHandler(template string) SearchedResultHandler {
-	client, err := elastic.NewClient(elastic.SetSniff(false))
-
-	if err != nil {
-		panic(err)
-	}
-
-	return SearchedResultHandler{client: client, view: view.CreateSearchedResultView(template)}
 }
 
 func (that SearchedResultHandler) ServeHTTP(response http.ResponseWriter, request *http.Request) {
@@ -79,4 +67,14 @@ func (that SearchedResultHandler) searchFromElastic(q string, from int) (model.S
 func rewriteQueryString(q string) string {
 	re := regexp.MustCompile(`([\w]*):`)
 	return re.ReplaceAllString(q, "Payload.$1:")
+}
+
+func NewSearchedResultHandler(template string) SearchedResultHandler {
+	client, err := elastic.NewClient(elastic.SetSniff(false))
+
+	if err != nil {
+		panic(err)
+	}
+
+	return SearchedResultHandler{client: client, view: view.CreateSearchedResultView(template)}
 }
