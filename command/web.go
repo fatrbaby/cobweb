@@ -21,8 +21,11 @@ func ServeWeb() cli.Command {
 		Action: func(context *cli.Context) {
 			port := context.Int("port")
 
-			http.Handle("/", http.FileServer(http.Dir("web/resources/assets")))
+			staticFilesHandler := http.FileServer(http.Dir("web/resources/assets"))
+			http.Handle("/assets/", http.StripPrefix("/assets/", staticFilesHandler))
 			http.Handle("/search", controller.NewSearchedResultHandler("web/resources/list.html"))
+
+			log.Printf("Serve on %d", port)
 
 			err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 
