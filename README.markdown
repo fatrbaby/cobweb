@@ -4,9 +4,9 @@
 
 ### 特点
 
-- 分布式
-- 使用ElasticSearch作为存储
-- 自带GUI洁面
+-  基于JsonRPC的分布式设计
+- 使用ElasticSearch作为存储设备
+- 自带Web GUI界面
 
 
 ### 开始使用
@@ -29,7 +29,7 @@ go build
 启动存储服务:
 `cobweb saver --port=8700`
 
-启动worker服务组:
+启动多个worker服务组:
 ```shell
 cobweb worker --port=7900
 cobweb worker --port=7901
@@ -37,7 +37,7 @@ cobweb worker --port=7902
 ```
 
 启动调度器:
-`cobweb dispatch --saver-port=8700 --worker-ports=7900,7901`
+`cobweb dispatch --saver-port=8700 --worker-ports=7900,7901,7902`
 
 启动Web GUI:
 `cobweb web --port=8091`
