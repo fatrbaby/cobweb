@@ -12,6 +12,7 @@ import (
 func ServeWeb() cli.Command {
 	command := cli.Command{
 		Name: "web",
+		Usage: "Start web server",
 		Flags: []cli.Flag{
 			cli.IntFlag{
 				Name:  "port",

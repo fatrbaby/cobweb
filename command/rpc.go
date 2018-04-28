@@ -13,6 +13,7 @@ import (
 func ServeRpcSaver() cli.Command {
 	command := cli.Command{
 		Name: "saver",
+		Usage: "Start saver rpc server",
 		Flags: []cli.Flag{
 			cli.IntFlag{
 				Name:  "port",
@@ -46,6 +47,7 @@ func ServeRpcSaver() cli.Command {
 func ServeRpcWorker() cli.Command {
 	command := cli.Command{
 		Name: "worker",
+		Usage: "Start worker rpc server",
 		Flags: []cli.Flag{
 			cli.IntFlag{
 				Name:  "port",

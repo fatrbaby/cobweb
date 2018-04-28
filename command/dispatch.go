@@ -14,6 +14,7 @@ import (
 func Dispatch() cli.Command {
 	command := cli.Command{
 		Name: "dispatch",
+		Usage: "Distributed services dispatching",
 		Flags: []cli.Flag{
 			cli.IntFlag{
 				Name:  "saver-port",
