@@ -23,15 +23,12 @@ func ServeWeb() cli.Command {
 
 			staticFilesHandler := http.FileServer(http.Dir("web/resources/assets"))
 			http.Handle("/assets/", http.StripPrefix("/assets/", staticFilesHandler))
+			http.Handle("/", controller.NewHomeHandler("web/resources/home.html"))
 			http.Handle("/search", controller.NewSearchedResultHandler("web/resources/list.html"))
 
 			log.Printf("Serve on %d", port)
 
-			err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
-
-			if err != nil {
-				log.Fatal(err.Error())
-			}
+			log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 		},
 	}
 
