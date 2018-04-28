@@ -3,7 +3,7 @@ package crawler
 import (
 	"bufio"
 	"fmt"
-	"github.com/fatrbaby/imooc-crawler/crawler/config"
+	"github.com/fatrbaby/cobweb/config"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-var rateLimiter = time.Tick(time.Second / config.Qps)
+var rateLimiter = time.Tick(time.Second / config.QPS)
 
 func Fetch(url string, toUTF8 bool) ([]byte, error) {
 	<-rateLimiter
