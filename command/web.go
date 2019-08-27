@@ -7,6 +7,7 @@ import (
 	"github.com/urfave/cli"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 func ServeWeb() cli.Command {
@@ -22,9 +23,17 @@ func ServeWeb() cli.Command {
 		},
 		Action: func(context *cli.Context) {
 			port := context.Int("port")
-			view.SetViewPath("web/resources/views")
+			abs, err := filepath.Abs("./../web/resources/views")
 
-			staticFilesHandler := http.FileServer(http.Dir("web/resources/assets"))
+			if err != nil {
+				log.Fatal("can not ger abs path of views")
+			}
+
+			view.SetViewPath(abs)
+
+			staticDir, _ := filepath.Abs("./../web/resources/assets")
+
+			staticFilesHandler := http.FileServer(http.Dir(staticDir))
 
 			http.Handle("/assets/", http.StripPrefix("/assets/", staticFilesHandler))
 			http.Handle("/", controller.NewHomeHandler("home.html"))
