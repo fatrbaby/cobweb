@@ -2,8 +2,8 @@ package persist
 
 import (
 	"context"
+	"errors"
 	"github.com/fatrbaby/cobweb/engine"
-	"github.com/kataras/iris/core/errors"
 	"gopkg.in/olivere/elastic.v5"
 	"log"
 )
